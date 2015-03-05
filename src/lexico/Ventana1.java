@@ -126,7 +126,7 @@ public class Ventana1 extends javax.swing.JFrame {
                         break;
                     
                     default:
-                        salida=salida+"Token: "+token+" "+"\n";
+                        salida=salida+"Token: "+token+" "+lexico.lexema+"\n";
                 }
             }
         } 
