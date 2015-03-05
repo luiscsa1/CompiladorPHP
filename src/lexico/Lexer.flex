@@ -129,3 +129,18 @@ public String lexema;
 {ASIG} {lexema=yytext(); return ASIG;}
 "," {return COMA;}
 . {return ERROR;}
+"**" {return T_POW;}
+"**=" {return T_POW_EQUAL;}
+"print" {return T_PRINT;}
+"private" {return T_PRIVATE;}
+"public" {return T_PUBLIC;}
+"protected" {return T_PROTECTED;}
+"require" {return T_REQUIRE;}
+"require_once" {return T_REQUIRE_ONCE;}
+"return" {return T_RETURN;}
+"<<" {return T_SL;}
+"<<=" {return T_SL_EQUAL;}
+">>" {return T_SR;}
+">>=" {return T_SR_EQUAL;}
+"<<<" {return T_START_HEREDOC;}
+"static" {return T_STATIC;}
