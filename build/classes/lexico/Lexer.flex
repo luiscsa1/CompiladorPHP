@@ -71,5 +71,6 @@ public String lexema;
 {FLOAT} {lexema=yytext(); return FLOAT;}
 {VARIABLE} {lexema=yytext(); return VARIABLE;}
 {MF} {lexema=yytext(); return MF;}
+{ASIG} {lexema=yytext(); return ASIG;}
 "," {return COMA;}
 . {return ERROR;}
