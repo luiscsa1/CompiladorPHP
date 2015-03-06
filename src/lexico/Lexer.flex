@@ -8,6 +8,7 @@ DIGITO=[+-]?[0-9]+
 CADENA=[\"][a-zA-Z0-9 ]*[\"]
 FLOAT=[+-]?[0-9]+[.][0-9]+
 MF=[+-]?[0-9]+[.]+[a-zA-Z_0-9]*
+COMENT_BLOQUE = [/][*].*[*][/]
 CARACTER=[\'][a-zA-Z0-9][\']
 MD=[+-]?[0-9]+[a-zA-Z_][0-9]*
 VARIABLE=[\$][a-zA-Z_]+[0-9]*
@@ -101,7 +102,7 @@ public String lexema;
 "__LINE__" {return T_LINE;}
 "list" {return T_LIST;}
 "and" {return T_LOGICAL_AND;}
-"or" {return T_LOGIAL_OR;}
+"or" {return T_LOGICAL_OR;}
 "xor" {return T_LOGICAL_XOR;}
 "__METHOD__" {return T_METHOD_C;}
 "-=" {return T_MINUS_EQUAL;}
@@ -145,3 +146,4 @@ public String lexema;
 {MF} {lexema=yytext(); return MF;}
 {CARACTER} {lexema=yytext(); return CARACTER;}
 {MD} {lexema=yytext(); return MD;}
+{COMENT_BLOQUE} {lexema=yytext(); return COMENT_BLOQUE;}
