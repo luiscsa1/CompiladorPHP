@@ -8,6 +8,8 @@ DIGITO=[+-]?[0-9]+
 CADENA=[\"][a-zA-Z0-9 ]*[\"]
 FLOAT=[+-]?[0-9]+[.][0-9]+
 MF=[+-]?[0-9]+[.]+[a-zA-Z_0-9]*
+CARACTER=[\'][a-zA-Z0-9][\']
+MD=[+-]?[0-9]+[a-zA-Z_][0-9]*
 VARIABLE=[\$][a-zA-Z_]+[0-9]*
 ESPACIO=[ \t\r\n]
 %{
@@ -90,7 +92,6 @@ public String lexema;
 "(integer)" {return T_INT_CAST;}
 "interface" {return T_INTERFACE;}
 "isset" {return T_ISSET;}
-"==" {return T_IS_EQUAL;} 
 ">=" {return T_IS_GREATER_OR_EQUAL;}
 "===" {return T_IS_IDENTICAL;}
 "!=" {return T_IS_NOT_EQUAL;}
@@ -118,15 +119,7 @@ public String lexema;
 "<?=" {return T_OPEN_TAG_WITH_ECHO;}
 "<%=" {return T_OPEN_TAG_WITH_ECHO;}
 "|=" {return T_OR_EQUAL;}
-"::" {return T_PAAMAYIM_NEKUDOTAYIM;}
 "+=" {return T_PLUS_EQUAL;}
-{LETRA} {lexema=yytext(); return ID;}
-{DIGITO} {lexema=yytext(); return ENTERO;}
-{CADENA} {lexema=yytext(); return CADENA;}
-{FLOAT} {lexema=yytext(); return FLOAT;}
-{VARIABLE} {lexema=yytext(); return VARIABLE;}
-{MF} {lexema=yytext(); return MF;}
-{ASIG} {lexema=yytext(); return ASIG;}
 "," {return COMA;}
 . {return ERROR;}
 "**" {return T_POW;}
@@ -144,3 +137,11 @@ public String lexema;
 ">>=" {return T_SR_EQUAL;}
 "<<<" {return T_START_HEREDOC;}
 "static" {return T_STATIC;}
+{LETRA} {lexema=yytext(); return ID;}
+{DIGITO} {lexema=yytext(); return ENTERO;}
+{CADENA} {lexema=yytext(); return CADENA;}
+{FLOAT} {lexema=yytext(); return FLOAT;}
+{VARIABLE} {lexema=yytext(); return VARIABLE;}
+{MF} {lexema=yytext(); return MF;}
+{CARACTER} {lexema=yytext(); return CARACTER;}
+{MD} {lexema=yytext(); return MD;}
