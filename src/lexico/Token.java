@@ -149,5 +149,8 @@ public enum Token {
     T_WHILE,
     T_WHITESPACE,
     T_XOR_EQUAL,
-    T_YIELD
+    T_YIELD,
+    CONJUNCION,
+    SEPARADOR
+   
 }

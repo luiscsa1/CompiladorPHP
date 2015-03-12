@@ -12,6 +12,9 @@ COMENT_BLOQUE = [/][*].*[*][/]
 CARACTER=[\'][a-zA-Z0-9][\']
 MD=[+-]?[0-9]+[a-zA-Z_][0-9]*
 VARIABLE=[\$][a-zA-Z_]+[0-9]*
+CONJUNCION=[{}[]()]
+SEPARADOR=[;,.]
+
 ESPACIO=[ \t\r\n]
 %{
 public String lexema;
@@ -19,125 +22,124 @@ public String lexema;
 %%
 {ESPACIO} {/*Ignore*/}
 "//".* {/*Ignore*/}
-"=" {return ASIGNACION;}
-"==" {return IGUAL;}
-"!=" {return DIFERENTE;}
-"+" {return MAS;}
-"-" {return MENOS;}
-"*" {return MULTIPLICACION;}
-"/" {return DIVISION;}
-"echo" {return T_ECHO;}
-"abstract" {return T_ABSTRACT;}
-"&=" {return T_AND_EQUAL;}
-"array" {return T_ARRAY;}
-"(array)" {return T_ARRAY_CAST;}
-"as" {return T_AS;}
-"&&" {return T_BOOLEAN_AND;}
-"||" {return T_BOOLEAN_OR;}
-"(bool)" {return T_BOOL_CAST;}
-"(boolean)" {return T_BOOL_CAST;}
-"break" {return T_BREAK;}
-"callable" {return T_CALLABLE;}
-"case" {return T_CASE;}
-"catch" {return T_CATCH;}
-"class" {return T_CLASS;}
-"__CLASS__" {return T_CLASS_C;}
-"clone" {return T_CLONE;}
-"?>" {return T_CLOSE_TAG;}
-".=" {return T_CONCAT_EQUAL;}
-"const" {return T_CONST;}
-"continue" {return T_CONTINUE;}
-"{?" {return T_CURLY_OPEN;}
-"--" {return T_DEC;}
-"declare" {return T_DECLARE;}
-"default" {return T_DEFAULT;}
-"__DIR__" {return T_DIR;}
-"/=" {return T_DIV_EQUAL;}
-"do" {return T_DO;}
-"${" {return T_DOLLAR_OPEN_CURLY_BRACES;}
-"=>" {return T_DOUBLE_ARROW;}
-"(real)" {return T_DOUBLE_CAST;}
-"(double)" {return T_DOUBLE_CAST;}
-"(float)" {return T_DOUBLE_CAST;}
-"::" {return T_DOUBLE_COLON;}
-"else" {return T_ELSE;}
-"elseif" {return T_ELSEIF;}
-"empty" {return T_EMPTY;}
-"enddeclare" {return T_ENDDECLARE;}
-"endfor" {return T_ENDFOR;}
-"endforeach" {return T_ENDFOREACH;}
-"endif" {return T_ENDIF;}
-"endswitch" {return T_ENDSWITCH;}
-"endwhile" {return T_ENDWHILE;}
-"eval" {return T_EVAL;}
-"exit" {return T_EXIT;}
-"die" {return T_EXIT;}
-"extends" {return T_EXTENDS;}
-"__FILE__" {return T_FILE;}
-"final" {return T_FINAL;}
-"finally" {return T_FINALLY;}
-"for" {return T_FOR;}
-"foreach" {return T_FOREACH;}
-"function" {return T_FUNCTION;}
-"cfunction" {return T_FUNC_C;}
-"global" {return T_GLOBAL;}
-"goto" {return T_GOTO;}
-"if" {return T_IF;}
-"implements" {return T_IMPLEMENTS;}
-"++" {return T_INC;}
-"include" {return T_INCLUDE;}
-"include_once" {return T_INCLUDE_ONCE;}
-"instanceof" {return T_INSTANCEOF;}
-"insteadof" {return T_INSTEADOF;}
-"(int)" {return T_INT_CAST;}
-"(integer)" {return T_INT_CAST;}
-"interface" {return T_INTERFACE;}
-"isset" {return T_ISSET;}
-">=" {return T_IS_GREATER_OR_EQUAL;}
-"===" {return T_IS_IDENTICAL;}
-"!=" {return T_IS_NOT_EQUAL;}
-"<>" {return T_IS_NOT_EQUAL;}
-"!==" {return T_IS_NOT_IDENTICAL;}
-"<=" {return T_IS_SMALLER_OR_EQUAL;}
-"__LINE__" {return T_LINE;}
-"list" {return T_LIST;}
-"and" {return T_LOGICAL_AND;}
-"or" {return T_LOGICAL_OR;}
-"xor" {return T_LOGICAL_XOR;}
-"__METHOD__" {return T_METHOD_C;}
-"-=" {return T_MINUS_EQUAL;}
-"%=" {return T_MOD_EQUAL;}
-"*=" {return T_MUL_EQUAL;}
-"namespace" {return T_NAMESPACE;}
-"__NAMESPACE__" {return T_NS_C;}
-"\\" {return T_NS_SEPARATOR;}
-"new" {return T_NEW;}
-"(object)" {return T_OBJECT_CAST;}
-"->" {return T_OBJECT_OPERATOR;}
-"<?php" {return T_OPEN_TAG;}
-"<?" {return T_OPEN_TAG;}
-"<%" {return T_OPEN_TAG;}
-"<?=" {return T_OPEN_TAG_WITH_ECHO;}
-"<%=" {return T_OPEN_TAG_WITH_ECHO;}
-"|=" {return T_OR_EQUAL;}
-"+=" {return T_PLUS_EQUAL;}
-"," {return COMA;}
-. {return ERROR;}
-"**" {return T_POW;}
-"**=" {return T_POW_EQUAL;}
-"print" {return T_PRINT;}
-"private" {return T_PRIVATE;}
-"public" {return T_PUBLIC;}
-"protected" {return T_PROTECTED;}
-"require" {return T_REQUIRE;}
-"require_once" {return T_REQUIRE_ONCE;}
-"return" {return T_RETURN;}
-"<<" {return T_SL;}
-"<<=" {return T_SL_EQUAL;}
-">>" {return T_SR;}
-">>=" {return T_SR_EQUAL;}
-"<<<" {return T_START_HEREDOC;}
-"static" {return T_STATIC;}
+"=" {lexema=yytext(); return ASIGNACION;}
+"==" {lexema=yytext(); return IGUAL;}
+"!=" {lexema=yytext(); return DIFERENTE;}
+"+" {lexema=yytext(); return MAS;}
+"-" {lexema=yytext(); return MENOS;}
+"*" {lexema=yytext(); return MULTIPLICACION;}
+"/" {lexema=yytext(); return DIVISION;}
+"echo" {lexema=yytext(); return T_ECHO;}
+"abstract" {lexema=yytext(); return T_ABSTRACT;}
+"&=" {lexema=yytext(); return T_AND_EQUAL;}
+"array" {lexema=yytext(); return T_ARRAY;}
+"(array)" {lexema=yytext(); return T_ARRAY_CAST;}
+"as" {lexema=yytext(); return T_AS;}
+"&&" {lexema=yytext(); return T_BOOLEAN_AND;}
+"||" {lexema=yytext(); return T_BOOLEAN_OR;}
+"(bool)" {lexema=yytext(); return T_BOOL_CAST;}
+"(boolean)" {lexema=yytext(); return T_BOOL_CAST;}
+"break" {lexema=yytext(); return T_BREAK;}
+"callable" {lexema=yytext(); return T_CALLABLE;}
+"case" {lexema=yytext(); return T_CASE;}
+"catch" {lexema=yytext(); return T_CATCH;}
+"class" {lexema=yytext(); return T_CLASS;}
+"__CLASS__" {lexema=yytext(); return T_CLASS_C;}
+"clone" {lexema=yytext(); return T_CLONE;}
+"?>" {lexema=yytext(); return T_CLOSE_TAG;}
+".=" {lexema=yytext(); return T_CONCAT_EQUAL;}
+"const" {lexema=yytext(); return T_CONST;}
+"continue" {lexema=yytext(); return T_CONTINUE;}
+"{?" {lexema=yytext(); return T_CURLY_OPEN;}
+"--" {lexema=yytext(); return T_DEC;}
+"declare" {lexema=yytext(); return T_DECLARE;}
+"default" {lexema=yytext(); return T_DEFAULT;}
+"__DIR__" {lexema=yytext(); return T_DIR;}
+"/=" {lexema=yytext(); return T_DIV_EQUAL;}
+"do" {lexema=yytext(); return T_DO;}
+"${" {lexema=yytext(); return T_DOLLAR_OPEN_CURLY_BRACES;}
+"=>" {lexema=yytext(); return T_DOUBLE_ARROW;}
+"(real)" {lexema=yytext(); return T_DOUBLE_CAST;}
+"(double)" {lexema=yytext(); return T_DOUBLE_CAST;}
+"(float)" {lexema=yytext(); return T_DOUBLE_CAST;}
+"::" {lexema=yytext(); return T_DOUBLE_COLON;}
+"else" {lexema=yytext(); return T_ELSE;}
+"elseif" {lexema=yytext(); return T_ELSEIF;}
+"empty" {lexema=yytext(); return T_EMPTY;}
+"enddeclare" {lexema=yytext(); return T_ENDDECLARE;}
+"endfor" {lexema=yytext(); return T_ENDFOR;}
+"endforeach" {lexema=yytext(); return T_ENDFOREACH;}
+"endif" {lexema=yytext(); return T_ENDIF;}
+"endswitch" {lexema=yytext(); return T_ENDSWITCH;}
+"endwhile" {lexema=yytext(); return T_ENDWHILE;}
+"eval" {lexema=yytext(); return T_EVAL;}
+"exit" {lexema=yytext(); return T_EXIT;}
+"die" {lexema=yytext(); return T_EXIT;}
+"extends" {lexema=yytext(); return T_EXTENDS;}
+"__FILE__" {lexema=yytext(); return T_FILE;}
+"final" {lexema=yytext(); return T_FINAL;}
+"finally" {lexema=yytext(); return T_FINALLY;}
+"for" {lexema=yytext(); return T_FOR;}
+"foreach" {lexema=yytext(); return T_FOREACH;}
+"function" {lexema=yytext(); return T_FUNCTION;}
+"cfunction" {lexema=yytext(); return T_FUNC_C;}
+"global" {lexema=yytext(); return T_GLOBAL;}
+"goto" {lexema=yytext(); return T_GOTO;}
+"if" {lexema=yytext(); return T_IF;}
+"implements" {lexema=yytext(); return T_IMPLEMENTS;}
+"++" {lexema=yytext(); return T_INC;}
+"include" {lexema=yytext(); return T_INCLUDE;}
+"include_once" {lexema=yytext(); return T_INCLUDE_ONCE;}
+"instanceof" {lexema=yytext(); return T_INSTANCEOF;}
+"insteadof" {lexema=yytext(); return T_INSTEADOF;}
+"(int)" {lexema=yytext(); return T_INT_CAST;}
+"(integer)" {lexema=yytext(); return T_INT_CAST;}
+"interface" {lexema=yytext(); return T_INTERFACE;}
+"isset" {lexema=yytext(); return T_ISSET;}
+">=" {lexema=yytext(); return T_IS_GREATER_OR_EQUAL;}
+"===" {lexema=yytext(); return T_IS_IDENTICAL;}
+"!=" {lexema=yytext(); return T_IS_NOT_EQUAL;}
+"<>" {lexema=yytext(); return T_IS_NOT_EQUAL;}
+"!==" {lexema=yytext(); return T_IS_NOT_IDENTICAL;}
+"<=" {lexema=yytext(); return T_IS_SMALLER_OR_EQUAL;}
+"__LINE__" {lexema=yytext(); return T_LINE;}
+"list" {lexema=yytext(); return T_LIST;}
+"and" {lexema=yytext(); return T_LOGICAL_AND;}
+"or" {lexema=yytext(); return T_LOGICAL_OR;}
+"xor" {lexema=yytext(); return T_LOGICAL_XOR;}
+"__METHOD__" {lexema=yytext(); return T_METHOD_C;}
+"-=" {lexema=yytext(); return T_MINUS_EQUAL;}
+"%=" {lexema=yytext(); return T_MOD_EQUAL;}
+"*=" {lexema=yytext(); return T_MUL_EQUAL;}
+"namespace" {lexema=yytext(); return T_NAMESPACE;}
+"__NAMESPACE__" {lexema=yytext(); return T_NS_C;}
+"\\" {lexema=yytext(); return T_NS_SEPARATOR;}
+"new" {lexema=yytext(); return T_NEW;}
+"(object)" {lexema=yytext(); return T_OBJECT_CAST;}
+"->" {lexema=yytext(); return T_OBJECT_OPERATOR;}
+"<?php" {lexema=yytext(); return T_OPEN_TAG;}
+"<?" {lexema=yytext(); return T_OPEN_TAG;}
+"<%" {lexema=yytext(); return T_OPEN_TAG;}
+"<?=" {lexema=yytext(); return T_OPEN_TAG_WITH_ECHO;}
+"<%=" {lexema=yytext(); return T_OPEN_TAG_WITH_ECHO;}
+"|=" {lexema=yytext(); return T_OR_EQUAL;}
+"+=" {lexema=yytext(); return T_PLUS_EQUAL;}
+"," {lexema=yytext(); return COMA;}
+"**" {lexema=yytext(); return T_POW;}
+"**=" {lexema=yytext(); return T_POW_EQUAL;}
+"print" {lexema=yytext(); return T_PRINT;}
+"private" {lexema=yytext(); return T_PRIVATE;}
+"public" {lexema=yytext(); return T_PUBLIC;}
+"protected" {lexema=yytext(); return T_PROTECTED;}
+"require" {lexema=yytext(); return T_REQUIRE;}
+"require_once" {lexema=yytext(); return T_REQUIRE_ONCE;}
+"return" {lexema=yytext(); return T_RETURN;}
+"<<" {lexema=yytext(); return T_SL;}
+"<<=" {lexema=yytext(); return T_SL_EQUAL;}
+">>" {lexema=yytext(); return T_SR;}
+">>=" {lexema=yytext(); return T_SR_EQUAL;}
+"<<<" {lexema=yytext(); return T_START_HEREDOC;}
+"static" {lexema=yytext(); return T_STATIC;}
 {LETRA} {lexema=yytext(); return ID;}
 {DIGITO} {lexema=yytext(); return ENTERO;}
 {CADENA} {lexema=yytext(); return CADENA;}
@@ -147,3 +149,6 @@ public String lexema;
 {CARACTER} {lexema=yytext(); return CARACTER;}
 {MD} {lexema=yytext(); return MD;}
 {COMENT_BLOQUE} {lexema=yytext(); return COMENT_BLOQUE;}
+{CONJUNCION} {lexema=yytext(); return CONJUNCION;}
+{SEPARADOR} {lexema=yytext(); return SEPARADOR;}
+. {return ERROR;}
