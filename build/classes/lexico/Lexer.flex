@@ -1,6 +1,9 @@
 package lexico;
+import java_cup.runtime.Symbol;
 import static lexico.Token.*;
 %%
+%line
+%column
 %class Lexer
 %type Token
 LETRA=[a-zA-Z_][a-zA-Z0-9_]*
@@ -8,9 +11,13 @@ DIGITO=[+-]?[0-9]+
 CADENA=[\"][a-zA-Z0-9 ]*[\"]
 FLOAT=[+-]?[0-9]+[.][0-9]+
 MF=[+-]?[0-9]+[.]+[a-zA-Z_0-9]*
+COMENT_BLOQUE = [/][*].*[*][/]
 CARACTER=[\'][a-zA-Z0-9][\']
 MD=[+-]?[0-9]+[a-zA-Z_][0-9]*
 VARIABLE=[\$][a-zA-Z_]+[0-9]*
+CONJUNCION=[{}[]()]
+
+
 ESPACIO=[ \t\r\n]
 %{
 public String lexema;
@@ -18,125 +25,59 @@ public String lexema;
 %%
 {ESPACIO} {/*Ignore*/}
 "//".* {/*Ignore*/}
-"=" {return ASIGNACION;}
-"==" {return IGUAL;}
-"!=" {return DIFERENTE;}
-"+" {return MAS;}
-"-" {return MENOS;}
-"*" {return MULTIPLICACION;}
-"/" {return DIVISION;}
-"echo" {return T_ECHO;}
-"abstract" {return T_ABSTRACT;}
-"&=" {return T_AND_EQUAL;}
-"array" {return T_ARRAY;}
-"(array)" {return T_ARRAY_CAST;}
-"as" {return T_AS;}
-"&&" {return T_BOOLEAN_AND;}
-"||" {return T_BOOLEAN_OR;}
-"(bool)" {return T_BOOL_CAST;}
-"(boolean)" {return T_BOOL_CAST;}
-"break" {return T_BREAK;}
-"callable" {return T_CALLABLE;}
-"case" {return T_CASE;}
-"catch" {return T_CATCH;}
-"class" {return T_CLASS;}
-"__CLASS__" {return T_CLASS_C;}
-"clone" {return T_CLONE;}
-"?>" {return T_CLOSE_TAG;}
-".=" {return T_CONCAT_EQUAL;}
-"const" {return T_CONST;}
-"continue" {return T_CONTINUE;}
-"{?" {return T_CURLY_OPEN;}
-"--" {return T_DEC;}
-"declare" {return T_DECLARE;}
-"default" {return T_DEFAULT;}
-"__DIR__" {return T_DIR;}
-"/=" {return T_DIV_EQUAL;}
-"do" {return T_DO;}
-"${" {return T_DOLLAR_OPEN_CURLY_BRACES;}
-"=>" {return T_DOUBLE_ARROW;}
-"(real)" {return T_DOUBLE_CAST;}
-"(double)" {return T_DOUBLE_CAST;}
-"(float)" {return T_DOUBLE_CAST;}
-"::" {return T_DOUBLE_COLON;}
-"else" {return T_ELSE;}
-"elseif" {return T_ELSEIF;}
-"empty" {return T_EMPTY;}
-"enddeclare" {return T_ENDDECLARE;}
-"endfor" {return T_ENDFOR;}
-"endforeach" {return T_ENDFOREACH;}
-"endif" {return T_ENDIF;}
-"endswitch" {return T_ENDSWITCH;}
-"endwhile" {return T_ENDWHILE;}
-"eval" {return T_EVAL;}
-"exit" {return T_EXIT;}
-"die" {return T_EXIT;}
-"extends" {return T_EXTENDS;}
-"__FILE__" {return T_FILE;}
-"final" {return T_FINAL;}
-"finally" {return T_FINALLY;}
-"for" {return T_FOR;}
-"foreach" {return T_FOREACH;}
-"function" {return T_FUNCTION;}
-"cfunction" {return T_FUNC_C;}
-"global" {return T_GLOBAL;}
-"goto" {return T_GOTO;}
-"if" {return T_IF;}
-"implements" {return T_IMPLEMENTS;}
-"++" {return T_INC;}
-"include" {return T_INCLUDE;}
-"include_once" {return T_INCLUDE_ONCE;}
-"instanceof" {return T_INSTANCEOF;}
-"insteadof" {return T_INSTEADOF;}
-"(int)" {return T_INT_CAST;}
-"(integer)" {return T_INT_CAST;}
-"interface" {return T_INTERFACE;}
-"isset" {return T_ISSET;}
-">=" {return T_IS_GREATER_OR_EQUAL;}
-"===" {return T_IS_IDENTICAL;}
-"!=" {return T_IS_NOT_EQUAL;}
-"<>" {return T_IS_NOT_EQUAL;}
-"!==" {return T_IS_NOT_IDENTICAL;}
-"<=" {return T_IS_SMALLER_OR_EQUAL;}
-"__LINE__" {return T_LINE;}
-"list" {return T_LIST;}
-"and" {return T_LOGICAL_AND;}
-"or" {return T_LOGIAL_OR;}
-"xor" {return T_LOGICAL_XOR;}
-"__METHOD__" {return T_METHOD_C;}
-"-=" {return T_MINUS_EQUAL;}
-"%=" {return T_MOD_EQUAL;}
-"*=" {return T_MUL_EQUAL;}
-"namespace" {return T_NAMESPACE;}
-"__NAMESPACE__" {return T_NS_C;}
-"\\" {return T_NS_SEPARATOR;}
-"new" {return T_NEW;}
-"(object)" {return T_OBJECT_CAST;}
-"->" {return T_OBJECT_OPERATOR;}
-"<?php" {return T_OPEN_TAG;}
-"<?" {return T_OPEN_TAG;}
-"<%" {return T_OPEN_TAG;}
-"<?=" {return T_OPEN_TAG_WITH_ECHO;}
-"<%=" {return T_OPEN_TAG_WITH_ECHO;}
-"|=" {return T_OR_EQUAL;}
-"+=" {return T_PLUS_EQUAL;}
-"," {return COMA;}
-. {return ERROR;}
-"**" {return T_POW;}
-"**=" {return T_POW_EQUAL;}
-"print" {return T_PRINT;}
-"private" {return T_PRIVATE;}
-"public" {return T_PUBLIC;}
-"protected" {return T_PROTECTED;}
-"require" {return T_REQUIRE;}
-"require_once" {return T_REQUIRE_ONCE;}
-"return" {return T_RETURN;}
-"<<" {return T_SL;}
-"<<=" {return T_SL_EQUAL;}
-">>" {return T_SR;}
-">>=" {return T_SR_EQUAL;}
-"<<<" {return T_START_HEREDOC;}
-"static" {return T_STATIC;}
+"{" {lexema=yytext(); return LLAVEIZQ;}
+"}" {lexema=yytext(); return LLAVEDER;}
+"(" {lexema=yytext(); return PARENTESISIZQ;}
+")" {lexema=yytext(); return PARENTESISDER;}
+"[" {lexema=yytext(); return CORCHETEIZQ;}
+"]" {lexema=yytext(); return CORCHETEDER;}
+"\'" {lexema=yytext(); return COMILLASIMPLE;}
+"\"" {lexema=yytext(); return COMILLADOBLE;}
+"." {lexema=yytext(); return PUNTO;} 
+"," {lexema=yytext(); return COMA;} 
+";" {lexema=yytext(); return PUNTOYCOMA;} 
+">" {lexema=yytext(); return MAYOR;}
+"<" {lexema=yytext(); return MENOR;}
+"=" {lexema=yytext(); return ASIGNACION;}
+"==" {lexema=yytext(); return IGUAL;}
+"!=" {lexema=yytext(); return DIFERENTE;}
+"+" {lexema=yytext(); return MAS;}
+"-" {lexema=yytext(); return MENOS;}
+"*" {lexema=yytext(); return MULTIPLICACION;}
+"/" {lexema=yytext(); return DIVISION;}
+"echo" {lexema=yytext(); return ECHO;}
+"array" {lexema=yytext(); return ARRAY;}
+"&&" {lexema=yytext(); return AND;}
+"||" {lexema=yytext(); return OR;}
+"break" {lexema=yytext(); return BREAK;}
+"case" {lexema=yytext(); return CASE;}
+"?>" {lexema=yytext(); return FINAL;}
+"do" {lexema=yytext(); return DO;}
+"else" {lexema=yytext(); return ELSE;}
+"elseif" {lexema=yytext(); return ELSEIF;}
+"endfor" {lexema=yytext(); return ENDFOR;}
+"endif" {lexema=yytext(); return ENDIF;}
+"endswitch" {lexema=yytext(); return ENDSWITCH;}
+"endwhile" {lexema=yytext(); return ENDWHILE;}
+"switch" {lexema=yytext(); return SWITCH;}
+"while" {lexema=yytext(); return WHILE;}
+"for" {lexema=yytext(); return FOR;}
+"function" {lexema=yytext(); return FUNCTION;}
+"if" {lexema=yytext(); return IF;}
+"--" {lexema=yytext(); return DECREMENTO;}
+"++" {lexema=yytext(); return INCREMENTO;}
+"include" {lexema=yytext(); return INCLUDE;}
+">=" {lexema=yytext(); return MAYORIGUAL;}
+"===" {lexema=yytext(); return IDENTICO;}
+"!=" {lexema=yytext(); return DIFERENTE;}
+"!==" {lexema=yytext(); return NOIDENTICO;}
+"<=" {lexema=yytext(); return MENORIGUAL;}
+"<?php" {lexema=yytext(); return INICIO;}
+"<?" {lexema=yytext(); return INICIO;}
+"<%" {lexema=yytext(); return INICIO;}
+"print" {lexema=yytext(); return PRINT;}
+"return" {lexema=yytext(); return RETURN;}
+"static" {lexema=yytext(); return STATIC;}
 {LETRA} {lexema=yytext(); return ID;}
 {DIGITO} {lexema=yytext(); return ENTERO;}
 {CADENA} {lexema=yytext(); return CADENA;}
@@ -145,3 +86,5 @@ public String lexema;
 {MF} {lexema=yytext(); return MF;}
 {CARACTER} {lexema=yytext(); return CARACTER;}
 {MD} {lexema=yytext(); return MD;}
+{COMENT_BLOQUE} {lexema=yytext(); return COMENT_BLOQUE;}
+. {return ERROR;}
